@@ -73,4 +73,18 @@ public class TreeBranch {
             if (ramo.getPiano() != 0) System.out.print(") ");
         }
     }
+
+    public static int calcolaRisultatoEspressione (TreeBranch ramo) throws IllegalArgumentException {
+        int risultatoAggiornato = 0;
+        if (ramo.radice.getChiave() <= 9) return risultatoAggiornato = ramo.radice.getChiave();
+        else if (ramo.radice.getValore().equalsIgnoreCase("+")) risultatoAggiornato = calcolaRisultatoEspressione(ramo.figlioSinistro) + calcolaRisultatoEspressione(ramo.figlioDestro); 
+        else if (ramo.radice.getValore().equalsIgnoreCase("-")) risultatoAggiornato = calcolaRisultatoEspressione(ramo.figlioSinistro) - calcolaRisultatoEspressione(ramo.figlioDestro); 
+        else if (ramo.radice.getValore().equalsIgnoreCase("*")) risultatoAggiornato = calcolaRisultatoEspressione(ramo.figlioSinistro) * calcolaRisultatoEspressione(ramo.figlioDestro); 
+        else if (ramo.radice.getValore().equalsIgnoreCase("+")) {
+            int divisore = calcolaRisultatoEspressione(ramo.figlioDestro);
+            if (divisore == 0) throw  new IllegalArgumentException();  
+            else risultatoAggiornato = calcolaRisultatoEspressione(ramo.figlioSinistro) / calcolaRisultatoEspressione(ramo.figlioDestro);
+        }
+        return risultatoAggiornato;
+    }
 }
