@@ -1,36 +1,76 @@
 package it.unibs.Arnaldo.OperationTree;
 
-import java.util.HashMap;
-
 public class TreeBranch {
     
-    public static HashMap<Integer,String> mappaOperatori = new HashMap<>(14); //i numeri da 0 a 10 e la corrispettiva chiave e i 4 simboli con chiave
+    public static int PIANO_DI_PARTENZA = 0;
 
-    private Operatori radice;
+    private Operatore radice;
+    private int piano; //l'altezza ipotetica a cui si trova qesta radice
     private TreeBranch figlioDestro;
     private TreeBranch figlioSinistro;
 
-    public TreeBranch(Operatori padre) {
+    private TreeBranch(Operatore padre, int piano) {
         this.radice = padre;
+        this.piano = piano;
+    }
+    
+    /**
+     * Ritorna la radice di quello specifico ramo dell'albero binario contenente l'operatore specifico del ramo
+     * @return un oggetto di tipo Operatore con il valore del ramo
+     */
+    public Operatore getRadice() {
+        return radice;
+    }
+
+    public int getPiano() {
+        return piano;
+    }
+
+    public TreeBranch getFiglioDestro() {
+        return figlioDestro;
+    }
+
+    public TreeBranch getFiglioSinistro() {
+        return figlioSinistro;
     }
 
     public boolean hasChildren() {
-        
+        if(this.figlioDestro == null) return false;
+        else if (this.figlioSinistro == null) return false;
+        else return true;
     }
 
-    public TreeBranch GeneraFigli(String str) {
-        Character riferiemento = new Character(str.charAt(0)); //cast s into a char
-        TreeBranch branch = new TreeBranch(riferiemento);
-        if (riferiemento.isDigit(0)) {
-            branch.figlioDestro = null;
-            branch.figlioSinistro = null;
-            return branch;
+    public static TreeBranch inizializzaAlberoRandom() {
+        Operatore radice = Operatore.generaOperazioneRandom();
+        TreeBranch ramo = new TreeBranch(radice,PIANO_DI_PARTENZA);
+        ramo.figlioDestro = GeneraFigliRandom(PIANO_DI_PARTENZA);
+        ramo.figlioSinistro = GeneraFigliRandom(PIANO_DI_PARTENZA);
+        return ramo;
+    } 
+
+    private static TreeBranch GeneraFigliRandom(int pianoPrecedente) {
+        pianoPrecedente ++;
+        Operatore radice = Operatore.generaOperatoreGenericoRandom();
+        TreeBranch ramo = new TreeBranch(radice, pianoPrecedente);
+        if (radice.getChiave() <= 9) { //se è una cifra
+            ramo.figlioDestro = null;
+            ramo.figlioSinistro = null;
         }
+        else { //se è un operatore
+            ramo.figlioSinistro = GeneraFigliRandom(pianoPrecedente);
+            ramo.figlioDestro = GeneraFigliRandom(pianoPrecedente);
+        }
+        return ramo;
+    }
+
+    public static void stampaOperazioni(TreeBranch ramo) {
+        if (ramo.radice.getChiave() <= 9) System.out.print(String.format("%s ",ramo.radice.getValore()));
         else {
-            String stringDx = str.substring(5, 10);
-            String stringSx = str.substring(0, 4);
-            branch.figlioDestro = GeneraFigli(stringDx);
-            branch.figlioSinistro = GeneraFigli(stringSx);
+            if (ramo.getPiano() != 0) System.out.print("(");
+            stampaOperazioni(ramo.figlioSinistro);
+            System.out.print(String.format("%s ",ramo.radice.getValore()));
+            stampaOperazioni(ramo.figlioDestro);
+            if (ramo.getPiano() != 0) System.out.print(") ");
         }
     }
 }
