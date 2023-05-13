@@ -18,8 +18,19 @@ public class TreeBranch {
         
     }
 
-    public void GeneraFigli(String str) {
-        char s = str.charAt(0);
-        
+    public TreeBranch GeneraFigli(String str) {
+        Character riferiemento = new Character(str.charAt(0)); //cast s into a char
+        TreeBranch branch = new TreeBranch(riferiemento);
+        if (riferiemento.isDigit(0)) {
+            branch.figlioDestro = null;
+            branch.figlioSinistro = null;
+            return branch;
+        }
+        else {
+            String stringDx = str.substring(5, 10);
+            String stringSx = str.substring(0, 4);
+            branch.figlioDestro = GeneraFigli(stringDx);
+            branch.figlioSinistro = GeneraFigli(stringSx);
+        }
     }
 }
