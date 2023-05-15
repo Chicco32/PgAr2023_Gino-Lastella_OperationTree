@@ -15,9 +15,32 @@ public class Operatore {
     );
 
     private int valore; //salverà il valore della chiave corrispondente piuttosto che effettivamente l'operaotre stesso
+    
+    /**
+     * costruttore a partire dalla chiave
+     * @param chiave
+     */
+    public Operatore(int chiave) throws IllegalArgumentException {
+        if (chiave < mappaOperatori.size()) this.valore = chiave;
+        else throw new IllegalArgumentException();
+    }
 
-    public Operatore(int valore) {
-        this.valore = valore;
+    /**
+     * @override del costruttore dato il valore
+     * @param valore la stringa dell'oggetto da controllare
+     */
+    public Operatore(String valore) throws IllegalArgumentException {
+        if(mappaOperatori.containsValue(valore)) {
+            this.valore = parserValoreOperatore(valore);
+        }
+        else throw new IllegalArgumentException();
+    }
+
+    public static int parserValoreOperatore(String valore) {
+        for (int i=0; i<mappaOperatori.size(); i++) {
+            if (mappaOperatori.get(i).equals(valore)) return i; //cerca nella mappa la chiave corrispondente a quel valore
+        }
+        return mappaOperatori.size();
     }
 
     /**
@@ -26,6 +49,10 @@ public class Operatore {
      */
     public String getValore() { 
         return mappaOperatori.get(this.valore);
+    }
+    
+    public void setValore(String valore) {
+        this.valore = Operatore.parserValoreOperatore(valore);
     }
 
     /**
@@ -53,4 +80,13 @@ public class Operatore {
         int nRandom = rand.nextInt(10, 14);
         return new Operatore(nRandom);
     }
+
+    public static void setRand(Random rand) {
+        Operatore.rand = rand;
+    }
+
+    public static void setMappaOperatori(Map<Integer, String> mappaOperatori) {
+        Operatore.mappaOperatori = mappaOperatori;
+    }
+
 }

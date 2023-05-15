@@ -20,6 +20,11 @@ public class MainTree {
             }
         }
 
+        String espressione = InputDati.leggiStringaNonVuota("Ora tocca a te");
+        TreeBranch testa2 = TreeBranch.inizializzaAlberoDaStringa(espressione);
+        System.out.println(espressione.substring(1));
+        TreeBranch.stampaOperazioni(testa2);
+
 
     }
 }
