@@ -96,7 +96,12 @@ public class TreeBranch {
                 ramo.figlioSinistro = generaAlberoDaStringa(espressione, pianoPrecedente, posizione + 1);
                 String primoOperatore = espressione.substring(posizione + 2, posizione + 3); //salta il primo numero e cerca la prima operazione
                 ramo.radice.setValore(primoOperatore); //il momento  in cui trasfrorma la parentesi in operazione
-                ramo.figlioDestro = generaAlberoDaStringa(espressione, pianoPrecedente, posizione + 4); //salta il secondo numero e va alla parentesi chiusa
+                if (Operatore.parserValoreOperatore(espressione.substring(posizione + 3, posizione +4)) <= 9) {//se dopo ricade nel caso base di trovare una cifra
+                    ramo.figlioDestro = generaAlberoDaStringa(espressione, pianoPrecedente, posizione + 4); //salta il secondo numero e va alla parentesi chiusa
+                }
+                else if (Operatore.parserValoreOperatore(espressione.substring(posizione + 3, posizione +4)) == 14) { //si ritrova un altra espressione e non il caso base
+                    ramo.figlioDestro = generaAlberoDaStringa(espressione, pianoPrecedente, posizione + 3); //ricomincia dando la priorità a quell'espressione
+                }
             }
             
         } 
