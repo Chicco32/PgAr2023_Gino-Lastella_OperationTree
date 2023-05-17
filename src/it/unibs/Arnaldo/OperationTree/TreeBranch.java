@@ -91,6 +91,16 @@ public class TreeBranch {
             //dopo una parentesi tonda ci sono due casi casi, o un altra parentesi tonda o un numero
             if (Operatore.parserValoreOperatore(espressione.substring(posizione + 1, posizione +2 )) == 14) {
                 ramo.figlioSinistro = generaAlberoDaStringa(espressione, pianoPrecedente, posizione + 1); //se è ancora una tonda semplicemnte ricomincia e diverrà l'inizio del calcolo una volta trasformata
+               
+                int posOperatore = posizione + 1 + TreeBranch.contaParentesi(espressione, posizione + 1); //trovata la posizione dell'operatore poi puo agire di conseguenza
+                String primoOperatore = espressione.substring(posOperatore, posOperatore +1); 
+                ramo.radice.setValore(primoOperatore); //il momento  in cui trasfrorma la parentesi in operazione
+                if (Operatore.parserValoreOperatore(espressione.substring(posOperatore + 1, posOperatore +2)) <= 9) {//se dopo ricade nel caso base di trovare una cifra
+                    ramo.figlioDestro = generaAlberoDaStringa(espressione, pianoPrecedente, posOperatore + 2);//salta il secondo numero e va alla parentesi chiusa
+                }
+                else if (Operatore.parserValoreOperatore(espressione.substring(posOperatore +1, posOperatore +2)) == 14) { //si ritrova un altra espressione e non il caso base
+                    ramo.figlioDestro = generaAlberoDaStringa(espressione, pianoPrecedente, posOperatore +1); //ricomincia dando la priorità a quell'espressione
+                }
             }
             else { //per forza un numero
                 ramo.figlioSinistro = generaAlberoDaStringa(espressione, pianoPrecedente, posizione + 1);
@@ -138,6 +148,33 @@ public class TreeBranch {
             stampaOperazioni(ramo.figlioDestro);
             if (ramo.getPiano() != TreeBranch.PIANO_DI_PARTENZA) System.out.print(") ");
         }
+    }
+
+    /**
+     * funzione che conta le parentesi e restituisce la posizione in cui finiscono, (cioe in cui si trova il prossimo operatore)
+     * @param espressione l'espressione da analizzare
+     * @param partenza il punto da cui partire la lettura della stringa
+     * @return onta le parentesi e quando la somma da zero restituisce la posizone successiva
+     */
+    public static int contaParentesi(String espressione, int partenza) {
+        int counterParentesi = 0;
+        int posizone = 0;
+        do {
+            int controllo = Operatore.parserValoreOperatore(espressione.substring(posizone + partenza, posizone + partenza +1));
+            switch (controllo){ //fa il parsing di ogni cosa che trova
+            case 14: //caso aperta parentesi
+                counterParentesi++;
+                break;
+            case 15: //caso parentesi chiusa
+                counterParentesi --;
+                break;
+            default:
+                break;
+            }
+            posizone++;
+        } while (counterParentesi !=0);
+        return posizone ++;
+
     }
 
     /**
