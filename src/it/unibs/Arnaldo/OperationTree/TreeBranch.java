@@ -59,7 +59,7 @@ public class TreeBranch {
      * @return la testa dell'albero
      */
     public static TreeBranch inizializzaAlberoDaStringa(String espressione) {
-       String espressioneInizializzata = "(".concat(espressione).concat(")"); //mette tutta l'espressione fra parentesi per fargli capire che si tratta di un operazione
+        String espressioneInizializzata = "(".concat(espressione.replaceAll("\\s", "")).concat(")"); //mette tutta l'espressione fra parentesi per fargli capire che si tratta di un operazione
         TreeBranch ramo = generaAlberoDaStringa(espressioneInizializzata, TreeBranch.PIANO_DI_PARTENZA, POSIZIONE_DI_PARTENZA);
         return ramo;
     } 
@@ -154,7 +154,7 @@ public class TreeBranch {
      * funzione che conta le parentesi e restituisce la posizione in cui finiscono, (cioe in cui si trova il prossimo operatore)
      * @param espressione l'espressione da analizzare
      * @param partenza il punto da cui partire la lettura della stringa
-     * @return onta le parentesi e quando la somma da zero restituisce la posizone successiva
+     * @return conta le parentesi e quando la somma da zero restituisce la posizone successiva
      */
     public static int contaParentesi(String espressione, int partenza) {
         int counterParentesi = 0;
@@ -172,7 +172,7 @@ public class TreeBranch {
                 break;
             }
             posizone++;
-        } while (counterParentesi !=0);
+        } while (counterParentesi !=0 && posizone<espressione.length());
         return posizone ++;
 
     }
